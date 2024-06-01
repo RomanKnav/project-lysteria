@@ -1,29 +1,28 @@
 <!DOCTYPE html>
+<!-- REMEMBER: ONLY USE "" AND NOT '' IN HTML-->
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Simple JavaScript Game</title>
-        <style>
-            body {
-                margin: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                background-color: #000;
-            }
-            canvas {
-                border: 1px solid white;
-            }
-        </style>
-    </head>
-    <body>
-    <canvas id="canvas1" width="980" height="605"></canvas>
-    <script src="src/script.js"></script>
-    </body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
+    <title>LYSTERIA</title>
 
-<!-- sheephunt dimensions: 800x300. WAY too small.
-for FNF, it's 1280x720
-Pico's school is 980x605 -->
+    <!-- GET ACCESS TO GOOGLE FONTS: -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tourney:wght@600&display=swap"
+      rel="stylesheet"/>
+
+      <script src="//cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+      <!-- this makes Phaser available globally -->
+  </head>
+  <body>
+		<!-- This is where we load our scripts -->
+		<!-- <script src="js/phaser.min.js"></script> -->
+
+		<script src="src/main.js" type="module" ></script>
+    <!-- module will allow us to use import/export keywords -->
+
+  </body> 
+</html>
