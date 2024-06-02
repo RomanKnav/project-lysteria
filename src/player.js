@@ -9,7 +9,18 @@ export default class Player {
         this.height = 50;
 
         // this path to be changed by 'inputHandler.js'
-        this.direction;
+        this.direction = "fukumean";
+
+        this.diabled = false;
+
+        // what's used for? Determine mouse coords and if it's clicked or not.
+        this.mouse = {
+            x: 10,
+            y: 10,
+            width: 0.1,
+            height: 0.1,
+            clicked: false
+        };
     }
 
     draw(context) {
