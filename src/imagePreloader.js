@@ -1,4 +1,8 @@
 // given an array of urls and a callback function to call once all images are loaded.
+
+/* where would I even preload images? In almost every class file in sheephunt, 
+images are loaded */
+
 function preloadImages(imageUrls, callback) {
     let loadedImages = 0;
     const imagesArray = [];
