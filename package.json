@@ -1,0 +1,19 @@
+{
+  "name": "lysteria",
+  "version": "1.0.0",
+  "description": "First game made by Synergy Studios lets gooo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomanKnav/project-lysteria.git"
+  },
+  "author": "Roman Navarro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RomanKnav/project-lysteria/issues"
+  },
+  "homepage": "https://github.com/RomanKnav/project-lysteria#readme"
+}
