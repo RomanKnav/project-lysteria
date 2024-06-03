@@ -11,6 +11,9 @@ export default class Player {
         // this path to be changed by 'inputHandler.js'
         this.direction = "fukumean";
 
+        // only 1 should be true at any time the player moves.
+        this.directions = {"left": false, "up": false, "right": false, "down": false,};
+
         this.disabled = false;
 
         // what's used for? Determine mouse coords and if it's clicked or not.
@@ -21,6 +24,10 @@ export default class Player {
             height: 0.1,
             clicked: false
         };
+
+        // MAP SHIT:
+        this.pos_path = "up";
+        this.stop = true;
     }
 
     draw(context) {
@@ -38,7 +45,8 @@ export default class Player {
     update() {
         // different angle will have to be drawn as player faces different directions.
 
-        if (!this.disabled) {
+        // disabled during states other than map state
+        if (!this.disabled && !this.stop) {
             switch(this.direction) {
                 case "left":
                     this.x -= 5;

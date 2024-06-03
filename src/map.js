@@ -14,8 +14,11 @@ var cxt = canvas.getContext("2d");
 cxt.fillStyle = "green";
 cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-let levels = {'0': {'x': canvas.width / 2, 'y': canvas.height - 100}, 
-              '1': {'x': canvas.width / 2, 'y': canvas.height - 200}
+// x, y, direction player can travel while at current point:
+let levels = {'0': {'x': canvas.width / 2, 'y': canvas.height - 100, 'path': 'up'}, 
+              '1': {'x': canvas.width / 2, 'y': canvas.height - 200, 'path': 'right'},
+              '2': {'x': canvas.width - 200, 'y': canvas.height - 200, 'path': 'right'},
+              '3': {'x': canvas.width - 200, 'y': canvas.height - 300, 'path': 'right'},
             };
 
 let state = "START";    // should jump to GAME state
@@ -24,7 +27,7 @@ let state = "START";    // should jump to GAME state
 // looks TINY!
 let startButt = new Button(canvas.width / 2, canvas.height / 3, 60, "Start", true);
 
-let player = new Player(levels['0']['x'], levels['0']['y']);
+let player = new Player(levels['0']['x'] - 10, levels['0']['y'] - 10);
 
 new InputHandler(player, canvas);
 
@@ -33,9 +36,36 @@ function handlePlayer() {
     player.update();
 }
 
+let currLevel = 0
+let currPoint = levels[currLevel];
+
+let inPosition = false; 
+
+function handleMovement() {
+    // needs serious fucking fixing
+    let nextPoint = levels[currLevel + 1];
+    // if player reached next point...
+    if ((nextPoint['x'] > player.x && nextPoint['x'] < player.x + player.width)
+    &&
+    (nextPoint['y'] > player.y && nextPoint['y'] < player.y + player.height)) {
+        inPosition = true;
+        player.stop = true;
+    } else {
+        inPosition = false;
+        // player.stop = true;
+    }
+
+    // other condition: if player reached next position
+    if (player.direction == currPoint['path']) {
+        // while player is moving, all other directions should be disabled.
+        player.stop = false;
+    } else player.stop = true;
+}
+
 function handleState() {
     switch(state) {
         case "START":
+            player.disabled = true;
             startButt.draw(cxt);
             mouseCollision(player.mouse, startButt, () => state = "GAME");
             break;
@@ -63,7 +93,8 @@ function drawLine(x1, y1, x2, y2) {
     cxt.stroke();
 }
 
-function handleLines() {
+// this simply DRAWS the lines, nothing more.
+function drawPaths() {
     for (let i = 0; i < Object.keys(levels).length - 1; i++) {
         let x1 = levels[i.toString()]['x'];
         let y1 = levels[i.toString()]['y'];
@@ -73,6 +104,7 @@ function handleLines() {
         drawLine(x1, y1, x2, y2);
     }
 }
+
 
 // mouse, button, func.
 function mouseCollision(first, second, callback) {
@@ -98,12 +130,14 @@ function animate() {
     cxt.fillRect(0, 0, canvas.width, canvas.height);
 
     handlePlayer();
+    handleMovement();
     handleState();
 
     // drawLine(canvas.width / 2, canvas.height / 2, 200, 200);
-    handleLines();
+    drawPaths();
 
-    console.log(player.direction);
+    // console.log(player.direction, player.stop);
+    console.log(inPosition, "player stop:", player.stop);
 
     window.requestAnimationFrame(animate);
 }
