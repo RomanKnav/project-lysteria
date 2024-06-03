@@ -11,7 +11,7 @@ export default class Player {
         // this path to be changed by 'inputHandler.js'
         this.direction = "fukumean";
 
-        this.diabled = false;
+        this.disabled = false;
 
         // what's used for? Determine mouse coords and if it's clicked or not.
         this.mouse = {
@@ -35,7 +35,28 @@ export default class Player {
         context.fillText("player", this.x + this.width / 2, this.y + this.height / 2);
     }
 
-    update(context) {
+    update() {
         // different angle will have to be drawn as player faces different directions.
+
+        if (!this.disabled) {
+            switch(this.direction) {
+                case "left":
+                    this.x -= 5;
+                    break;
+                case "up":
+                    this.y -= 5;
+                    break;
+                case "right":
+                    this.x += 5;
+                    break;
+                case "down":
+                    this.y += 5;
+                    break;
+                case "x":
+                    this.y -= 5;
+                    this.x -= 5;
+                    break;
+            }
+        }
     }
 }

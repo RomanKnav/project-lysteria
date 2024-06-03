@@ -12,19 +12,19 @@ export default class InputHandler {
 
             switch (event.key) {
                 // left
-                case '37':
+                case 'ArrowLeft':
                 case 'a':
                     entity.direction = 'left';
                     break;
-                case '38':
+                case 'ArrowUp':
                 case 'w':
                     entity.direction = 'up';
                     break;
-                case '39':
+                case 'ArrowRight':
                 case 'd':
                     entity.direction = 'right';
                     break;
-                case '40':
+                case 'ArrowDown':
                 case 's':
                     entity.direction = 'down';
                     break; 

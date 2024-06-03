@@ -10,9 +10,13 @@ import Button from '/src/button.js';
 var canvas = document.getElementById('canvas1');
 var cxt = canvas.getContext('2d');
 
-var ctx = canvas.getContext("2d");
-ctx.fillStyle = "green";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+var cxt = canvas.getContext("2d");
+cxt.fillStyle = "green";
+cxt.fillRect(0, 0, canvas.width, canvas.height);
+
+let levels = {'0': {'x': canvas.width / 2, 'y': canvas.height - 100}, 
+              '1': {'x': canvas.width / 2, 'y': canvas.height - 200}
+            };
 
 let state = "START";    // should jump to GAME state
 
@@ -20,13 +24,14 @@ let state = "START";    // should jump to GAME state
 // looks TINY!
 let startButt = new Button(canvas.width / 2, canvas.height / 3, 60, "Start", true);
 
-let player = new Player(canvas.width / 2, canvas.height / 2);
+let player = new Player(levels['0']['x'], levels['0']['y']);
+
+new InputHandler(player, canvas);
 
 function handlePlayer() {
     player.draw(cxt);
+    player.update();
 }
-
-new InputHandler(player, canvas);
 
 function handleState() {
     switch(state) {
@@ -38,6 +43,34 @@ function handleState() {
         case "GAME":
             player.disabled = false;
             break;
+    }
+}
+
+/* 
+I can possibly implement a "pinpoint" system, maybe in a dict:
+let pinpoints = {start: {x: 100, y: 100}, l1: {x: 100, y: 200}, l2: {x: 200, y: 300}}
+*/
+
+/* each subdict represents a (x, y) coord. These not only represent the points to draw the
+lines, but also the points player is allowed to move to: */
+
+function drawLine(x1, y1, x2, y2) {
+    cxt.beginPath();
+    cxt.moveTo(x1, y1);
+    cxt.lineTo(x2, y2);
+    cxt.strokeStyle = 'black';
+    cxt.lineWidth = 10;
+    cxt.stroke();
+}
+
+function handleLines() {
+    for (let i = 0; i < Object.keys(levels).length - 1; i++) {
+        let x1 = levels[i.toString()]['x'];
+        let y1 = levels[i.toString()]['y'];
+        let x2 = levels[(i + 1).toString()]['x'];
+        let y2 = levels[(i + 1).toString()]['y'];
+
+        drawLine(x1, y1, x2, y2);
     }
 }
 
@@ -58,11 +91,6 @@ function mouseCollision(first, second, callback) {
     }
 }
 
-/* 
-I can possibly implement a "pinpoint" system, maybe in a dict:
-let points = {start: {x: 100, y: 100}, l1: {x: 100, y: 200}, l2: {x: 200, y: 300}}
-*/
-
 function animate() {
     cxt.clearRect(0, 0, canvas.width, canvas.height);
     // cxt.fillStyle = "transparent";
@@ -72,7 +100,10 @@ function animate() {
     handlePlayer();
     handleState();
 
-    console.log(player.mouse.clicked);
+    // drawLine(canvas.width / 2, canvas.height / 2, 200, 200);
+    handleLines();
+
+    console.log(player.direction);
 
     window.requestAnimationFrame(animate);
 }
