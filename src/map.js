@@ -38,28 +38,17 @@ function handlePlayer() {
 
 let currLevel = 0
 let currPoint = levels[currLevel];
+let nextPoint = levels[currLevel + 1];
 
 let inPosition = false; 
 
 function handleMovement() {
     // needs serious fucking fixing
-    let nextPoint = levels[currLevel + 1];
-    // if player reached next point...
-    if ((nextPoint['x'] > player.x && nextPoint['x'] < player.x + player.width)
-    &&
-    (nextPoint['y'] > player.y && nextPoint['y'] < player.y + player.height)) {
-        inPosition = true;
-        player.stop = true;
-    } else {
-        inPosition = false;
-        // player.stop = true;
-    }
 
     // other condition: if player reached next position
-    if (player.direction == currPoint['path']) {
-        // while player is moving, all other directions should be disabled.
-        player.stop = false;
-    } else player.stop = true;
+    // if (player.direction == currPoint['path']) {
+    //     player.stop = false;
+    // } else player.stop = true;
 }
 
 function handleState() {

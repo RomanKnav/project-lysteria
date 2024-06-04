@@ -1,5 +1,8 @@
 // this class rep.s player moving around level worlds
 
+// NEED TO IMPORT CANVAS
+var canvas = document.getElementById('canvas1');
+
 export default class Player {
     constructor(x, y) {
         this.x = x;
@@ -9,12 +12,12 @@ export default class Player {
         this.height = 50;
 
         // this path to be changed by 'inputHandler.js'
-        this.direction = "fukumean";
 
         // only 1 should be true at any time the player moves.
-        this.directions = {"left": false, "up": false, "right": false, "down": false,};
+        this.directions = 
+                {"null": false, "left": false, "up": true, "right": false, "down": false};
 
-        this.disabled = false;
+        this.disabled = false; 
 
         // what's used for? Determine mouse coords and if it's clicked or not.
         this.mouse = {
@@ -26,8 +29,12 @@ export default class Player {
         };
 
         // MAP SHIT:
-        this.pos_path = "up";
+        // current direction key being pressed (can ONLY be any of the directions in this.directions)
+        this.direction = "null";  
+        this.potential = "up";  // path player has potential to take NEXT.
         this.stop = true;
+        this.atPoint = true;    // this can become false while player in motion.
+        this.pressed = false;   // only when this is true can player move.
     }
 
     draw(context) {
@@ -42,27 +49,30 @@ export default class Player {
         context.fillText("player", this.x + this.width / 2, this.y + this.height / 2);
     }
 
+    // need to make a func that returns true and ONLY true that checks for key that's been 
+    // pressed, and if that key is true in dict, return true.
+    keyPressed() {
+        
+    }
+
     update() {
         // different angle will have to be drawn as player faces different directions.
 
-        // disabled during states other than map state
-        if (!this.disabled && !this.stop) {
+        // this disables all directions except "true" one in this.directions.
+        if (!this.disabled && this.directions[this.direction] && this.pressed) {
+            this.atPoint = false;
             switch(this.direction) {
                 case "left":
-                    this.x -= 5;
+                    if (this.x > 0) this.x -= 5;
                     break;
                 case "up":
-                    this.y -= 5;
+                    if (this.y > 0) this.y -= 5;
                     break;
                 case "right":
-                    this.x += 5;
+                    if (this.x + this.height < canvas.width) this.x += 5;
                     break;
                 case "down":
-                    this.y += 5;
-                    break;
-                case "x":
-                    this.y -= 5;
-                    this.x -= 5;
+                    if (this.y + this.height < canvas.height) this.y += 5;
                     break;
             }
         }
