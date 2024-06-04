@@ -7,6 +7,10 @@ export default class InputHandler {
         this.canvas = canvas;
         let keys = {"37": false, "38": false, "39": false, "40": false};
 
+        // make function (?) that checks if given key is true in player.directions:
+
+        let dirs = entity.directions;
+
         document.addEventListener("keydown", (event) => {
             keys[event.key] = true;
 
@@ -14,19 +18,19 @@ export default class InputHandler {
                 // left
                 case 'ArrowLeft':
                 case 'a':
-                    entity.direction = 'left';
+                    if (dirs['left']) entity.direction = 'left';
                     break;
                 case 'ArrowUp':
                 case 'w':
-                    entity.direction = 'up';
+                    if (dirs['up']) entity.direction = 'up';
                     break;
                 case 'ArrowRight':
                 case 'd':
-                    entity.direction = 'right';
+                    if (dirs['right']) entity.direction = 'right';
                     break;
                 case 'ArrowDown':
                 case 's':
-                    entity.direction = 'down';
+                    if (dirs['down']) entity.direction = 'down';
                     break; 
             }
         });

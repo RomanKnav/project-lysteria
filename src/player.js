@@ -13,9 +13,11 @@ export default class Player {
 
         // this path to be changed by 'inputHandler.js'
 
-        // only 1 should be true at any time the player moves.
+        // lists POSSIBLE paths player can take at current point:
         this.directions = 
                 {"null": false, "left": false, "up": true, "right": false, "down": false};
+
+        /* on moving question: inputHandler should only register those that are TRUE */
 
         this.disabled = false; 
 
@@ -30,8 +32,8 @@ export default class Player {
 
         // MAP SHIT:
         // current direction key being pressed (can ONLY be any of the directions in this.directions)
+        // this should ONLY change the true direction:
         this.direction = "null";  
-        this.potential = "up";  // path player has potential to take NEXT.
         this.stop = true;
         this.atPoint = true;    // this can become false while player in motion.
         this.pressed = false;   // only when this is true can player move.
@@ -52,13 +54,17 @@ export default class Player {
     // need to make a func that returns true and ONLY true that checks for key that's been 
     // pressed, and if that key is true in dict, return true.
     keyPressed() {
-        
+
     }
 
     update() {
         // different angle will have to be drawn as player faces different directions.
 
-        // this disables all directions except "true" one in this.directions.
+        // this ensures player doesn't move on own when starting Game state:
+        let trueKey = Object.keys(this.directions).find(key => this.directions[key] == true);
+        if (this.direction == trueKey) this.pressed = true;
+
+        // this disables all directions except "true" one in this.directions. this.pressed added
         if (!this.disabled && this.directions[this.direction] && this.pressed) {
             this.atPoint = false;
             switch(this.direction) {

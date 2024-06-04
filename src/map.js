@@ -42,13 +42,9 @@ let nextPoint = levels[currLevel + 1];
 
 let inPosition = false; 
 
-function handleMovement() {
-    // needs serious fucking fixing
-
-    // other condition: if player reached next position
-    // if (player.direction == currPoint['path']) {
-    //     player.stop = false;
-    // } else player.stop = true;
+// for when player reaches next point (stop moving)
+function playerCollision() {
+    
 }
 
 function handleState() {
@@ -125,8 +121,7 @@ function animate() {
     // drawLine(canvas.width / 2, canvas.height / 2, 200, 200);
     drawPaths();
 
-    // console.log(player.direction, player.stop);
-    console.log(inPosition, "player stop:", player.stop);
+    console.log(player.direction);
 
     window.requestAnimationFrame(animate);
 }
