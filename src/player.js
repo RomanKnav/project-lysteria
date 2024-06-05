@@ -40,7 +40,8 @@ export default class Player {
         // this should ONLY be set in GAME state.
         this.pressed = false;   
 
-        this.reached = true; // false when moving. True again when certain coords reached.
+        // this could potentially be reseted after current level beaten.
+        this.moved = true; // false when moving. True again when certain coords reached.
 
         // player in motion when NOT within the boundaries of any two points.
         // this should turn TRUE after keypress.

@@ -35,6 +35,7 @@ let player = new Player(levels[0].x - 10, levels[0].y - 10);
 new InputHandler(player, canvas);
 
 let currLevel = 0;
+// REMEMBER: still need to add incrementor ^^^
 let currPoint = levels[currLevel];      // yes, levels[0] is valid
 let nextPoint = levels[currLevel + 1];
 
@@ -58,16 +59,14 @@ function handlePlayer() {
         player.inMotion = true;
     } 
     else {
-        // NEW SHIT HERE:
+        // player "not in motion" after having reached current destination
         player.inMotion = false;
         currPoint.reached = true;
     };
 
-
-    // STOPPING LOGIC HERE:
-    // what exactly will stop player from moving?
-    if (!player.inMotion && !nextPoint.reached) {
-
+    // NEW SHIT: player reached destination:
+    if (!player.inMotion && player.moved) {
+        player.direction = "null";
     }
 }
 

@@ -32,6 +32,7 @@ export default class InputHandler {
             if (direction && dirs[direction] && !entity.disabled) {
                 entity.direction = direction;
                 entity.inMotion = true;
+                entity.moved = true;        // maybe set timer to reset?
             }
         });
 
