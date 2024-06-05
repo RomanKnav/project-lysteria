@@ -30,7 +30,7 @@ let state = "START";    // should jump to GAME state
 // looks TINY!
 let startButt = new Button(canvas.width / 2, canvas.height / 3, 60, "Start", true);
 
-let player = new Player(levels[0].x - 10, levels[0].y - 10);
+let player = new Player(levels[0].x, levels[0].y);
 
 new InputHandler(player, canvas);
 
@@ -38,16 +38,24 @@ let currLevel = 0;
 // REMEMBER: still need to add incrementor ^^^
 let currPoint = levels[currLevel];      // yes, levels[0] is valid
 let nextPoint = levels[currLevel + 1];
+// ^^this MUST BE UPDATED as soon as player reaches next point.
 
-// for when player reaches next point (stop moving)
-// point should be INSIDE player coords.
+// this increments level
+function cremate() {
+    currLevel += 1;
+    updateLevels();
+}
 
-// I could use this for BOTH points player is inbetween.
+// this updates the current and next point:
+function updateLevels() {
+    currPoint = levels[currLevel]; 
+    nextPoint = levels[currLevel + 1];
+}
+
+// doesn't change when player.y changes
 function atPoint(playa, point) {
-    if ((point.y > playa.y && point.y < playa.y + playa.height) &&
-         point.x > playa.x && point.x < playa.x + playa.width) {
-            return true;
-         }
+    if (playa.y == point.y && playa.x == point.x) return true;
+    else return false;
 }
 
 function handlePlayer() {
@@ -59,7 +67,6 @@ function handlePlayer() {
         player.inMotion = true;
     } 
     else {
-        // player "not in motion" after having reached current destination
         player.inMotion = false;
         currPoint.reached = true;
     };
@@ -67,7 +74,13 @@ function handlePlayer() {
     // NEW SHIT: player reached destination:
     if (!player.inMotion && player.moved) {
         player.direction = "null";
+        player.pressed = false;
+        cremate();
     }
+
+    // player has reached current point (all are initially false)
+    // think I should put this one and one above together
+    if (player.direction == "null") currPoint.reached = true;
 }
 
 // when called: atPoint(player, nextPoint)
@@ -85,14 +98,6 @@ function handleState() {
             break;
     }
 }
-
-/* 
-I can possibly implement a "pinpoint" system, maybe in a dict:
-let pinpoints = {start: {x: 100, y: 100}, l1: {x: 100, y: 200}, l2: {x: 200, y: 300}}
-*/
-
-/* each subdict represents a (x, y) coord. These not only represent the points to draw the
-lines, but also the points player is allowed to move to: */
 
 function drawLine(x1, y1, x2, y2) {
     cxt.beginPath();
@@ -112,7 +117,6 @@ function drawPaths() {
         let y2 = levels[i + 1].y;
 
         drawLine(x1, y1, x2, y2);
-        // console.log(i, i + 1);
     }
 }
 
@@ -141,10 +145,11 @@ function animate() {
     handlePlayer();
     handleState();
 
-    // drawLine(canvas.width / 2, canvas.height / 2, 200, 200);
     drawPaths();
 
-    console.log(player.inMotion);
+    // console.log(player.y, currPoint.y, atPoint(player, currPoint));
+    // console.log(player.direction);
+    console.log(player.pressed);
 
     window.requestAnimationFrame(animate);
 }

@@ -37,10 +37,12 @@ export default class Player {
         this.atPoint = true;        // this can become false while player in motion.
         
         // this was created to stop player from moving on own.
-        // this should ONLY be set in GAME state.
+        // not ONLY used for that, but also indicates when correct key was pressed 
         this.pressed = false;   
 
         // this could potentially be reseted after current level beaten.
+        // as soon as button's pressed, this turns to false. When destination reached, true.
+        // dont think it's necessary. Can just use if (player.direction == "null")
         this.moved = true; // false when moving. True again when certain coords reached.
 
         // player in motion when NOT within the boundaries of any two points.
