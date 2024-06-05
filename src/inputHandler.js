@@ -5,33 +5,33 @@ export default class InputHandler {
     // in map, pass player as entity. 
     constructor(entity, canvas) {
         this.canvas = canvas;
-        let keys = {"37": false, "38": false, "39": false, "40": false};
 
         // make function (?) that checks if given key is true in player.directions:
 
         let dirs = entity.directions;
 
-        document.addEventListener("keydown", (event) => {
-            keys[event.key] = true;
+        // keys: the actual keypresses. Values: direction for player to move.
+        const keyDirectionMap = {
+            'ArrowLeft': 'left',
+            'a': 'left',
+            'ArrowUp': 'up',
+            'w': 'up',
+            'ArrowRight': 'right',
+            'd': 'right',
+            'ArrowDown': 'down',
+            's': 'down'
+        };
 
-            switch (event.key) {
-                // left
-                case 'ArrowLeft':
-                case 'a':
-                    if (dirs['left']) entity.direction = 'left';
-                    break;
-                case 'ArrowUp':
-                case 'w':
-                    if (dirs['up']) entity.direction = 'up';
-                    break;
-                case 'ArrowRight':
-                case 'd':
-                    if (dirs['right']) entity.direction = 'right';
-                    break;
-                case 'ArrowDown':
-                case 's':
-                    if (dirs['down']) entity.direction = 'down';
-                    break; 
+        document.addEventListener("keydown", (event) => {
+
+            let direction = keyDirectionMap[event.key];
+            /* direction is simply a pressed key. If it's in the map, return its value. 
+            Otherwise, its undefined */
+
+            // if direction exists in map and it's value is true...
+            if (direction && dirs[direction] && !entity.disabled) {
+                entity.direction = direction;
+                entity.inMotion = true;
             }
         });
 
@@ -58,6 +58,19 @@ export default class InputHandler {
             entity.mouse.y = e.y - canvasPosition.top;
         });
         this.canvas.addEventListener("mouseleave", function () {
+            entity.mouse.x = undefined;
+            entity.mouse.y = undefined;
+        });
+
+        // TOUCH INPUT:
+        this.canvas.addEventListener("touchstart", function (e) {
+            entity.mouse.clicked = true;
+            let touch = e.touches[0];
+            entity.mouse.x = touch.clientX - canvasPosition.left;
+            entity.mouse.y = touch.clientY - canvasPosition.top;
+        });
+        this.canvas.addEventListener("touchend", function () {
+            entity.mouse.clicked = false;
             entity.mouse.x = undefined;
             entity.mouse.y = undefined;
         });

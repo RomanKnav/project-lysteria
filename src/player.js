@@ -33,11 +33,19 @@ export default class Player {
         // MAP SHIT:
         // current direction key being pressed (can ONLY be any of the directions in this.directions)
         // this should ONLY change the true direction:
-        this.direction = "null";  
-        this.stop = true;
-        this.atPoint = true;    // this can become false while player in motion.
-        this.pressed = false;   // only when this is true can player move.
-    }
+        this.direction = "null";    // this should turn to "up" after 1st keypress.
+        this.atPoint = true;        // this can become false while player in motion.
+        
+        // this was created to stop player from moving on own.
+        // this should ONLY be set in GAME state.
+        this.pressed = false;   
+
+        this.reached = true; // false when moving. True again when certain coords reached.
+
+        // player in motion when NOT within the boundaries of any two points.
+        // this should turn TRUE after keypress.
+        this.inMotion = false; 
+    } 
 
     draw(context) {
         // REMEMBER: take preloading into consideration
@@ -51,17 +59,12 @@ export default class Player {
         context.fillText("player", this.x + this.width / 2, this.y + this.height / 2);
     }
 
-    // need to make a func that returns true and ONLY true that checks for key that's been 
-    // pressed, and if that key is true in dict, return true.
-    keyPressed() {
-
-    }
-
     update() {
         // different angle will have to be drawn as player faces different directions.
 
-        // this ensures player doesn't move on own when starting Game state:
+        // this ensures player doesn't move on own when starting Game state. 
         let trueKey = Object.keys(this.directions).find(key => this.directions[key] == true);
+        // ^ this returns "up"
         if (this.direction == trueKey) this.pressed = true;
 
         // this disables all directions except "true" one in this.directions. this.pressed added
