@@ -10,6 +10,9 @@ export default class InputHandler {
 
         let dirs = entity.directions;
 
+        /*  this.directions = 
+                {"null": false, "left": false, "up": true, "right": false, "down": false}; */
+
         // keys: the actual keypresses. Values: direction for player to move.
         const keyDirectionMap = {
             'ArrowLeft': 'left',

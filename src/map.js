@@ -34,22 +34,44 @@ let player = new Player(levels[0].x, levels[0].y);
 
 new InputHandler(player, canvas);
 
+// YES, these global vars are needed.
 let currLevel = 0;
-// REMEMBER: still need to add incrementor ^^^
-let currPoint = levels[currLevel];      // yes, levels[0] is valid
-let nextPoint = levels[currLevel + 1];
-// ^^this MUST BE UPDATED as soon as player reaches next point.
+let nextLevel = currLevel + 1
+let currPoint = levels[currLevel];      
+let nextPoint = levels[nextLevel];  
 
-// this increments level
+// what's this? path property of point object.
+let potential = levels[currLevel].path;
+// this should be updated only if levels[currLevel + 1] even exists.
+// ^^this MUST BE UPDATED as soon as player reaches next point.
+// should this be a player property?
+
+// this is SIMPLY to increment the next level VAR.s (updated in updateLevels)
 function cremate() {
     currLevel += 1;
+    nextLevel += 1;
     updateLevels();
 }
 
 // this updates the current and next point:
 function updateLevels() {
-    currPoint = levels[currLevel]; 
-    nextPoint = levels[currLevel + 1];
+    currPoint = levels[currLevel];
+    nextPoint = levels[currLevel + 1]; 
+    // if levels[currLevel + 1] exists, set it to so. Otherwise, no incrementing.
+    nextPoint = levels[nextLevel] ? levels[nextLevel] : levels[currLevel];
+    // HERE'S WHERE POTENTIAL'S UPDATED:
+    potential = levels[currLevel].path  // ex: up, down, right
+
+    // what we doing? setting all of them to false except the current potential move:
+    // by this point currPoint SHOULD be updated
+    for (const dir of Object.keys(player.directions)) {
+        // actual value: player.directions[dir]
+        // how we get current true?
+
+        // maybe should use ternary
+        if (dir == potential) player.directions[dir] = true;
+        else player.directions[dir] = false;
+    }
 }
 
 // doesn't change when player.y changes
@@ -71,15 +93,16 @@ function handlePlayer() {
         currPoint.reached = true;
     };
 
-    // NEW SHIT: player reached destination:
+    // PLAYER REACHED NEXTPOINT; time to increment shit:
+    // if (atPoint(player, nextPoint)) {
     if (!player.inMotion && player.moved) {
         player.direction = "null";
         player.pressed = false;
-        cremate();
+        cremate();      
     }
 
     // player has reached current point (all are initially false)
-    // think I should put this one and one above together
+    // think I should put this one and one above together       --TODO HERE
     if (player.direction == "null") currPoint.reached = true;
 }
 
@@ -149,7 +172,8 @@ function animate() {
 
     // console.log(player.y, currPoint.y, atPoint(player, currPoint));
     // console.log(player.direction);
-    console.log(player.pressed);
+    // console.log(currLevel, nextLevel, potential);
+    console.log(currLevel, potential);
 
     window.requestAnimationFrame(animate);
 }

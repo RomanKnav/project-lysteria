@@ -14,6 +14,8 @@ export default class Player {
         // this path to be changed by 'inputHandler.js'
 
         // lists POSSIBLE paths player can take at current point:
+        // at game start, "up" should turn to true:
+        // if player won't move, could be bc you set all these to FALSE!
         this.directions = 
                 {"null": false, "left": false, "up": true, "right": false, "down": false};
 
@@ -40,10 +42,8 @@ export default class Player {
         // not ONLY used for that, but also indicates when correct key was pressed 
         this.pressed = false;   
 
-        // this could potentially be reseted after current level beaten.
-        // as soon as button's pressed, this turns to false. When destination reached, true.
-        // dont think it's necessary. Can just use if (player.direction == "null")
-        this.moved = true; // false when moving. True again when certain coords reached.
+        // why's this initially set to true?
+        this.moved = false; // false when moving. True again when certain coords reached.
 
         // player in motion when NOT within the boundaries of any two points.
         // this should turn TRUE after keypress.
