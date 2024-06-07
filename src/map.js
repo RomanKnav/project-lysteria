@@ -7,7 +7,7 @@ import Button from '/src/button.js';
 // forget images, focus on getting map logic done.
 // make object (?) representing player. Don't think I need to make a class?
 
-// there's lotta shit here that should ONLY run in the MAP state
+// there's alot here that should ONLY run in the MAP state
 
 var canvas = document.getElementById('canvas1');
 var cxt = canvas.getContext('2d');
@@ -18,47 +18,42 @@ cxt.fillRect(0, 0, canvas.width, canvas.height);
 
 // x, y, direction player can travel while at current point:
 // yes, not specifying keys as strings is valid
-let levels = {0: {x: canvas.width / 2, y: canvas.height - 100, path: 'up', reached: false}, 
-              1: {x: canvas.width / 2, y: canvas.height - 400, path: 'right', reached: false},
-              2: {x: canvas.width - 200, y: canvas.height - 400, path: 'right', reached: false},
-              3: {x: canvas.width - 200, y: canvas.height - 300, path: 'right', reached: false},
+let levels = {0: {x: canvas.width / 2 - 1, y: canvas.height - 100, path: 'up', reached: false}, 
+              1: {x: canvas.width / 2 - 1, y: canvas.height - 400, path: 'right', reached: false},
+              2: {x: canvas.width - 200, y: canvas.height - 400, path: 'down', reached: false},
+              3: {x: canvas.width - 200, y: canvas.height - 300, path: 'end', reached: false},
             };
 
 let state = "START";    // should jump to GAME state
 
 // x, y, width, text, clickable
 // looks TINY!
-let startButt = new Button(canvas.width / 2, canvas.height / 3, 60, "Start", true);
+let startButt = new Button(canvas.width / 2 - 30, canvas.height / 3, 60, "Start", true);
 
-let player = new Player(levels[0].x, levels[0].y);
+let player = new Player(levels[0].x, levels[0].y - 50);
 
 new InputHandler(player, canvas);
 
 // YES, these global vars are needed.
 let currLevel = 0;
-let nextLevel = currLevel + 1
-let currPoint = levels[currLevel];      
+let nextLevel = 1;
+let currPoint = levels[currLevel];  // eg: {x: canvas.width / 2, y: canvas.height - 100...}
 let nextPoint = levels[nextLevel];  
 
-// what's this? path property of point object.
+// what's this? path property of point object (up, right, etc):
 let potential = levels[currLevel].path;
-// this should be updated only if levels[currLevel + 1] even exists.
-// ^^this MUST BE UPDATED as soon as player reaches next point.
-// should this be a player property?
 
-// this is SIMPLY to increment the next level VAR.s (updated in updateLevels)
+// this updates the current and next point (run only after player reaches next point)
 function cremate() {
-    currLevel += 1;
-    nextLevel += 1;
-    updateLevels();
-}
+    // increment level vars:
+    // PROBLEM FOUND: this gets incremented INDEFINITELY:
+    currLevel += 1, nextLevel += 1;     // currLevel = 1, nextLevel = 2
 
-// this updates the current and next point:
-function updateLevels() {
     currPoint = levels[currLevel];
-    nextPoint = levels[currLevel + 1]; 
+
     // if levels[currLevel + 1] exists, set it to so. Otherwise, no incrementing.
     nextPoint = levels[nextLevel] ? levels[nextLevel] : levels[currLevel];
+
     // HERE'S WHERE POTENTIAL'S UPDATED:
     potential = levels[currLevel].path  // ex: up, down, right
 
@@ -75,10 +70,13 @@ function updateLevels() {
 }
 
 // doesn't change when player.y changes
+// this simply checks if player is at a point:
 function atPoint(playa, point) {
-    if (playa.y == point.y && playa.x == point.x) return true;
-    else return false;
-}
+   // I could use range() on the points
+    return playa.x === point.x && playa.y + playa.height === point.y;
+    // return (point.x <= playa.x + 5 && point.x >= playa.x) && 
+    //        (point.y <= playa.y + 5 && point.y >= playa.y)
+};
 
 function handlePlayer() {
     player.draw(cxt);
@@ -94,11 +92,16 @@ function handlePlayer() {
     };
 
     // PLAYER REACHED NEXTPOINT; time to increment shit:
-    // if (atPoint(player, nextPoint)) {
     if (!player.inMotion && player.moved) {
         player.direction = "null";
         player.pressed = false;
-        cremate();      
+        
+        // cremate shit (MUST HAPPEN ONLY ONCE)
+        if (player.moved) {
+            // currLevel += 1, nextLevel += 1;
+            cremate();
+            player.moved = false;
+        }
     }
 
     // player has reached current point (all are initially false)
@@ -115,7 +118,6 @@ function handleState() {
             startButt.draw(cxt);
             mouseCollision(player.mouse, startButt, () => state = "GAME");
             break;
-        
         case "GAME":
             player.disabled = false;
             break;
@@ -166,14 +168,14 @@ function animate() {
     cxt.fillRect(0, 0, canvas.width, canvas.height);
 
     handlePlayer();
+    drawPaths();
     handleState();
 
-    drawPaths();
+    // console.log(currLevel, potential);
+    // console.log(currLevel, nextLevel);
 
-    // console.log(player.y, currPoint.y, atPoint(player, currPoint));
-    // console.log(player.direction);
-    // console.log(currLevel, nextLevel, potential);
-    console.log(currLevel, potential);
+    // console.log("playerCoords:", player.x, player.y, "nextCoords:", nextPoint.x, nextPoint.y);
+    console.log(potential, player.pressed);
 
     window.requestAnimationFrame(animate);
 }

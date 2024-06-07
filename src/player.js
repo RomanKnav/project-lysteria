@@ -36,7 +36,6 @@ export default class Player {
         // current direction key being pressed (can ONLY be any of the directions in this.directions)
         // this should ONLY change the true direction:
         this.direction = "null";    // this should turn to "up" after 1st keypress.
-        this.atPoint = true;        // this can become false while player in motion.
         
         // this was created to stop player from moving on own.
         // not ONLY used for that, but also indicates when correct key was pressed 
@@ -72,19 +71,18 @@ export default class Player {
 
         // this disables all directions except "true" one in this.directions. this.pressed added
         if (!this.disabled && this.directions[this.direction] && this.pressed) {
-            this.atPoint = false;
             switch(this.direction) {
                 case "left":
-                    if (this.x > 0) this.x -= 5;
+                    if (this.x > 0) this.x -= 2;
                     break;
                 case "up":
-                    if (this.y > 0) this.y -= 5;
+                    if (this.y > 0) this.y -= 2;
                     break;
                 case "right":
-                    if (this.x + this.height < canvas.width) this.x += 5;
+                    if (this.x + this.height < canvas.width) this.x += 2;
                     break;
                 case "down":
-                    if (this.y + this.height < canvas.height) this.y += 5;
+                    if (this.y + this.height < canvas.height) this.y += 2;
                     break;
             }
         }
