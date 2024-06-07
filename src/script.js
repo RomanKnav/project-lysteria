@@ -71,11 +71,10 @@ function cremate() {
 
 // doesn't change when player.y changes
 // this simply checks if player is at a point:
+// we use to check if player between currPoint and nextPoint
 function atPoint(playa, point) {
    // I could use range() on the points
     return playa.x === point.x && playa.y + playa.height === point.y;
-    // return (point.x <= playa.x + 5 && point.x >= playa.x) && 
-    //        (point.y <= playa.y + 5 && point.y >= playa.y)
 };
 
 function handlePlayer() {

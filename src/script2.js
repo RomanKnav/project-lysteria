@@ -7,25 +7,26 @@ import Map from '/src/map.js';
 
 var canvas = document.getElementById('canvas1');
 var cxt = canvas.getContext('2d');
-
-var cxt = canvas.getContext("2d");
 cxt.fillStyle = "green";
 cxt.fillRect(0, 0, canvas.width, canvas.height);
 
+let state = "START";
+
+// DIMENSIONS: 854x480. 
 let worlds = {
     1: 
     { 
-        0: {x: canvas.width / 2 - 1, y: canvas.height - 100, path: 'up', reached: false}, 
-        1: {x: canvas.width / 2 - 1, y: canvas.height - 400, path: 'right', reached: false},
+        0: {x: canvas.width / 2, y: canvas.height - 100, path: 'up', reached: false}, 
+        1: {x: canvas.width / 2, y: canvas.height - 400, path: 'right', reached: false},
         2: {x: canvas.width - 200, y: canvas.height - 400, path: 'down', reached: false},
         3: {x: canvas.width - 200, y: canvas.height - 300, path: 'end', reached: false},
     },
     2: 
     { 
-        0: {x: canvas.width / 2 - 1, y: canvas.height - 100, path: 'up', reached: false}, 
-        1: {x: canvas.width / 2 - 1, y: canvas.height - 400, path: 'right', reached: false},
-        2: {x: canvas.width - 200, y: canvas.height - 400, path: 'down', reached: false},
-        3: {x: canvas.width - 200, y: canvas.height - 300, path: 'end', reached: false},
+        0: {x: 100, y: 100, path: 'right', reached: false}, 
+        1: {x: canvas.width / 2 + 100, y: 100, path: 'down', reached: false},
+        2: {x: canvas.width / 2 + 100, y: 300, path: 'left', reached: false},
+        3: {x: 100, y: 300, path: 'end', reached: false},
     },
     3: 
     { 
@@ -34,12 +35,11 @@ let worlds = {
         2: {x: canvas.width - 200, y: canvas.height - 400, path: 'down', reached: false},
         3: {x: canvas.width - 200, y: canvas.height - 300, path: 'end', reached: false},
     },   
-};
-
-let state = "START"; 
+}; 
 
 // x, y, width, text, clickable
 let startButt = new Button(canvas.width / 2 - 30, canvas.height / 3, 60, "Start", true);
+startButt.draw(cxt);
 
 // **********TODO: initiate first game object**********
 
@@ -53,37 +53,52 @@ new InputHandler(player, canvas);
 let worldNum = 1;
 let currMap = new Map(worlds[worldNum]);
 
-// player start point in the world at point 0:
-player.x = currMap[0].x;
-player.y = currMap[0].y;
+// maybe I should include a "handleMap" function...
 
-function handlePlayer() {
-    player.draw(cxt);
-    player.update();
-
-    // when player NOT AT either points, inMotion is true. 
-    if (!atPoint(player, currPoint) && !atPoint(player, nextPoint)) {
-        player.inMotion = true;
-    } 
-    else {
-        player.inMotion = false;
-        currPoint.reached = true;
-    };
-
-    // PLAYER REACHED NEXTPOINT; time to increment shit:
-    if (!player.inMotion && player.moved) {
-        player.direction = "null";
-        player.pressed = false;
-        
-        // cremate shit (MUST HAPPEN ONLY ONCE)
-        if (player.moved) {
-            // currLevel += 1, nextLevel += 1;
-            cremate();
-            player.moved = false;
-        }
-    }
-
-    // player has reached current point (all are initially false)
-    // think I should put this one and one above together       --TODO HERE
-    if (player.direction == "null") currPoint.reached = true;
+function handleMap() {
+    currMap.drawPaths(cxt);
+    currMap.handlePlayer(cxt);
 }
+
+function handleState() {
+    switch(state) {
+        case "START":
+            player.disabled = true;
+            startButt.draw(cxt);
+            mouseCollision(player.mouse, startButt, () => state = "GAME");
+            break;
+        case "GAME":
+            player.disabled = false;
+            break;
+    }
+}
+
+function mouseCollision(first, second, callback) {
+    if (
+      first.x >= second.x &&
+      first.x <= second.x + second.width &&
+      first.y >= second.y &&
+      first.y <= second.y + second.height
+    ) {
+        second.stroke = "red";
+        if (first.clicked) {
+            callback();
+        }
+    } else {
+        second.stroke = "black";
+    }
+}
+
+function animate() {
+    cxt.clearRect(0, 0, canvas.width, canvas.height);
+    cxt.fillStyle = "green"; 
+    cxt.fillRect(0, 0, canvas.width, canvas.height);
+
+    handleMap();
+    handleState();
+
+    console.log(player.inMotion);
+
+    window.requestAnimationFrame(animate);
+}
+animate();
