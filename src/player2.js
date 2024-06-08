@@ -4,9 +4,9 @@
 var canvas = document.getElementById('canvas1');
 
 export default class Player {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor() {
+        this.x;
+        this.y;
 
         this.width = 50;
         this.height = 50;

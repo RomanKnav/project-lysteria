@@ -97,7 +97,8 @@ function animate() {
     handleState();
 
     // console.log(player.direction == player.trueKey, player.pressed);
-    // console.log(player.pressed);
+    // console.log(player.y, worlds[worldNum][currMap.currLevel].y);   // should NOT be true.
+    console.log(player.x, canvas.width - 200);
 
     window.requestAnimationFrame(animate);
 }

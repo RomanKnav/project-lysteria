@@ -35,17 +35,14 @@ export default class InputHandler {
             // note that this runs ONLY if a key is pressed down
             if (direction && dirs[direction] && !entity.disabled) {
                 entity.direction = direction;
-                entity.inMotion = true;
                 entity.moved = true;        // maybe set timer to reset?
             }
         });
 
         // the above variables should remain true after key-up.
         document.addEventListener("keyup", (event) => {
-            if (!entity.dead) {
-                // keys[event.key] = false;    
+            if (!entity.dead) { 
             }
-
         });
 
         // MOUSE INPUT: 

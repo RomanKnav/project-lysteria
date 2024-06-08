@@ -30,8 +30,9 @@ export default class Map {
 
         // this.player = new Player(this.world[this.currLevel].x, this.world[this.currLevel].y);
         this.player = player;
-        this.player.x = this.currLevel.x;
-        this.player.y = this.currLevel.y;
+
+        this.player.x = this.world[this.currLevel].x - 1;
+        this.player.y = this.world[this.currLevel].y;
     }
 
     cremate() {
@@ -47,10 +48,6 @@ export default class Map {
             else this.player.directions[dir] = false;
         }
     };
-
-    // simply used to check if player at a given point
-    // Use arrow functions for class methods that do not need to bind "this":
-    atPoint = (playa, point) => playa.x === point.x && playa.y + playa.height === point.y;
 
     drawPaths(context) {
         for (let point = 0; point < Object.keys(this.world).length - 1; point++) {
@@ -68,19 +65,32 @@ export default class Map {
         }
     }
 
+    // simply used to check if player at a given point
+    // Use arrow functions for class methods that do not need to bind "this":
+    // does this work correctly? is this valid function notation?
+    // atPoint = (playa, point) => playa.x === point.x && playa.y + playa.height === point.y;
+
+    atPoint(playa, point) {
+        return playa.x == point.x && playa.y == point.y;
+    }
+
     // THIS REQUIRES CONTEXT TOO:
     handlePlayer(context) {
+    
         this.player.draw(context);
         this.player.update();
+
     
-        // when player NOT AT either points, inMotion is true. 
-        if (!this.atPoint(this.player, this.currPoint) && !this.atPoint(this.player, this.nextPoint)) {
-            this.player.inMotion = true;
-        } 
-        else {
-            this.player.inMotion = false;
-            this.currPoint.reached = true;
-        };
+        // when player NOT AT either points, inMotion is true. Initially false:
+        // THIS is setting it to fucking true??? yes. CULPRIT HERE LOL
+        this.player.inMotion = !this.atPoint(this.player, this.currPoint) && 
+                               !this.atPoint(this.player, this.nextPoint);
+
+        if (this.player.inMotion) {
+            this.currPoint.reached = false; // Reset the reached status while moving
+        } else {
+            this.currPoint.reached = true; // Mark the current point as reached
+        }
     
         // PLAYER REACHED NEXTPOINT; time to increment shit:
         if (!this.player.inMotion && this.player.moved) {

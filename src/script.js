@@ -172,6 +172,8 @@ function animate() {
     handleState();
 
     window.requestAnimationFrame(animate);
+
+    console.log(player.inMotion);
 }
 
 animate();
