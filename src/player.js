@@ -4,9 +4,9 @@
 var canvas = document.getElementById('canvas1');
 
 export default class Player {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor() {
+        this.x;
+        this.y;
 
         this.width = 50;
         this.height = 50;
@@ -14,10 +14,10 @@ export default class Player {
         // this path to be changed by 'inputHandler.js'
 
         // lists POSSIBLE paths player can take at current point:
-        // at game start, "up" should turn to true:
-        // if player won't move, could be bc you set all these to FALSE!
         this.directions = 
                 {"null": false, "left": false, "up": true, "right": false, "down": false};
+
+        // this.directions[this.direction].....example: false
 
         /* on moving question: inputHandler should only register those that are TRUE */
 
@@ -33,8 +33,6 @@ export default class Player {
         };
 
         // MAP SHIT:
-        // current direction key being pressed (can ONLY be any of the directions in this.directions)
-        // this should ONLY change the true direction:
         this.direction = "null";    // this should turn to "up" after 1st keypress.
         
         // this was created to stop player from moving on own.
@@ -47,6 +45,12 @@ export default class Player {
         // player in motion when NOT within the boundaries of any two points.
         // this should turn TRUE after keypress.
         this.inMotion = false; 
+
+        // this ensures player doesn't move on own when starting Game state. 
+
+        // this doesn't work with script.js:
+        // this.trueKey = Object.keys(this.directions).find(key => this.directions[key]);
+        // ^ this returns "up"
     } 
 
     draw(context) {
@@ -64,12 +68,15 @@ export default class Player {
     update() {
         // different angle will have to be drawn as player faces different directions.
 
-        // this ensures player doesn't move on own when starting Game state. 
-        let trueKey = Object.keys(this.directions).find(key => this.directions[key] == true);
-        // ^ this returns "up"
+        let trueKey = Object.keys(this.directions).find(key => this.directions[key]);
+        console.log(this.inMotion);
+
+        // player.direction == player.trueKey
         if (this.direction == trueKey) this.pressed = true;
+        else this.pressed = false;
 
         // this disables all directions except "true" one in this.directions. this.pressed added
+        // this.directions[this.direction]....example: 
         if (!this.disabled && this.directions[this.direction] && this.pressed) {
             switch(this.direction) {
                 case "left":

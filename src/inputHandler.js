@@ -31,7 +31,8 @@ export default class InputHandler {
             /* direction is simply a pressed key. If it's in the map, return its value. 
             Otherwise, its undefined */
 
-            // if direction exists in map and it's value is true...
+            // if direction exists in map and it's value in player.directions is true...
+            // note that this runs ONLY if a key is pressed down
             if (direction && dirs[direction] && !entity.disabled) {
                 entity.direction = direction;
                 entity.inMotion = true;

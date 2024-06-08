@@ -41,17 +41,16 @@ let worlds = {
 let startButt = new Button(canvas.width / 2 - 30, canvas.height / 3, 60, "Start", true);
 startButt.draw(cxt);
 
-// **********TODO: initiate first game object**********
-
-// seems I'll have to remove player's x/y args. To be determined by current world
-
-// let player = new Player(levels[0].x, levels[0].y - 50);
 let player = new Player();
 new InputHandler(player, canvas);
 
 // map requires: worlds sub-dictionary, player 
 let worldNum = 1;
-let currMap = new Map(worlds[worldNum]);
+let currMap = new Map(worlds[worldNum], player);
+
+// DONT WORK:
+// player.x = worlds[worldNum][currMap.currLevel.x];
+// player.y = worlds[worldNum][currMap.currLevel.y];
 
 // maybe I should include a "handleMap" function...
 
@@ -97,7 +96,8 @@ function animate() {
     handleMap();
     handleState();
 
-    console.log(player.inMotion);
+    // console.log(player.direction == player.trueKey, player.pressed);
+    // console.log(player.pressed);
 
     window.requestAnimationFrame(animate);
 }

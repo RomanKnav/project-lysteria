@@ -8,24 +8,40 @@ export default class Map {
     // so, each Map object reps one WORLD.
 
     // with "player" arg, I can just use the same Player instance in script.js
-    constructor(levels) {
-        this.levels = levels
+
+    /* example argument......Map(worlds[worldNum], player):
+    1:
+    { 
+        0: {x: canvas.width / 2, y: canvas.height - 100, path: 'up', reached: false}, 
+        1: {x: canvas.width / 2, y: canvas.height - 400, path: 'right', reached: false},
+        2: {x: canvas.width - 200, y: canvas.height - 400, path: 'down', reached: false},
+        3: {x: canvas.width - 200, y: canvas.height - 300, path: 'end', reached: false},
+    }
+
+    */ 
+    constructor(levels, player) {
+        this.world = levels
 
         this.currLevel = 0;
         this.nextLevel = 1;
-        this.currPoint = this.levels[this.currLevel];  // eg: {x: canvas.width / 2, y: canvas.height - 100...}
-        this.nextPoint = this.levels[this.nextLevel];
-        this.potential = this.levels[this.currLevel].path;   
+        this.currPoint = this.world[this.currLevel];  // eg: {x: canvas.width / 2, y: canvas.height - 100...}
+        this.nextPoint = this.world[this.nextLevel];
+        this.potential = this.world[this.currLevel].path;   
 
-        this.player = new Player(this.levels[this.currLevel].x, this.levels[this.currLevel].y);
+        // this.player = new Player(this.world[this.currLevel].x, this.world[this.currLevel].y);
+        this.player = player;
+        this.player.x = this.currLevel.x;
+        this.player.y = this.currLevel.y;
     }
 
     cremate() {
         this.currLevel += 1, this.nextLevel += 1;       // increment levels
-        this.currPoint = this.levels[this.currLevel];
-        this.nextPoint = this.levels[this.nextLevel] ? this.levels[this.nextLevel] : this.levels[this.currLevel];
-        this.potential = this.levels[this.currLevel].path 
+        this.currPoint = this.world[this.currLevel];
+        this.nextPoint = this.world[this.nextLevel] ? this.world[this.nextLevel] : this.world[this.currLevel];
+        this.potential = this.world[this.currLevel].path 
 
+        // what this? setting all directions to false except the current potential move:
+        // by this point currPoint SHOULD be updated
         for (const dir of Object.keys(this.player.directions)) {
             if (dir == this.potential) this.player.directions[dir] = true;
             else this.player.directions[dir] = false;
@@ -37,11 +53,11 @@ export default class Map {
     atPoint = (playa, point) => playa.x === point.x && playa.y + playa.height === point.y;
 
     drawPaths(context) {
-        for (let i = 0; i < Object.keys(this.levels).length - 1; i++) {
-            let x1 = this.levels[i].x;
-            let y1 = this.levels[i].y;
-            let x2 = this.levels[i + 1].x;
-            let y2 = this.levels[i + 1].y;
+        for (let point = 0; point < Object.keys(this.world).length - 1; point++) {
+            let x1 = this.world[point].x;
+            let y1 = this.world[point].y;
+            let x2 = this.world[point + 1].x;
+            let y2 = this.world[point + 1].y;
     
             context.beginPath();
             context.moveTo(x1, y1);
