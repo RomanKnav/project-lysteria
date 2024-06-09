@@ -1,7 +1,7 @@
 // to fuck around with map objects
 
 import Player from '/src/player.js';
-import InputHandler from '/src/inputHandler.js';
+import InputHandler from '/src/inputHandler2.js';
 import Button from '/src/button.js'; 
 import Map from '/src/map.js';    
 
@@ -54,7 +54,7 @@ let player = new Player();
 new InputHandler(player, canvas);
 
 // map requires: worlds sub-dictionary, player 
-let worldNum = 4;
+let worldNum = 2;
 let currMap = new Map(worlds[worldNum], player);
 
 function handleMap() {
@@ -98,6 +98,9 @@ function animate() {
 
     handleMap();
     handleState();
+
+    // console.log(player.inMotion);
+    console.log(player.inMotion);
 
     window.requestAnimationFrame(animate);
 }

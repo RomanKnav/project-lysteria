@@ -58,6 +58,7 @@ export default class Map {
             this.currPoint.reached = false; 
         } else {
             this.currPoint.reached = true; 
+            this.player.inMotion = false;
         }
         
         if (!this.player.inMotion && this.player.moved) {

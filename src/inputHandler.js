@@ -25,7 +25,7 @@ export default class InputHandler {
         document.addEventListener("keydown", (event) => {
 
             let direction = keyDirectionMap[event.key];
-            console.log(direction);
+            // console.log(direction);
             /* direction is simply a pressed key. If it's in the map, return its value. 
             Otherwise, its undefined */
 
@@ -39,8 +39,7 @@ export default class InputHandler {
 
         // the above variables should remain true after key-up.
         document.addEventListener("keyup", (event) => {
-            if (!entity.dead) { 
-            }
+            // lmfao
         });
 
         // MOUSE INPUT: 
