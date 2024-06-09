@@ -32,8 +32,6 @@ export default class Map {
         // these are INITIAL player coords:
         this.player.x = this.world[this.currLevel].x;
         this.player.y = this.world[this.currLevel].y;
-
-        this.outaRange = false;
     }
 
     cremate() {
@@ -41,14 +39,17 @@ export default class Map {
         this.currPoint = this.world[this.currLevel];
         this.nextPoint = this.world[this.nextLevel] ? this.world[this.nextLevel] : this.world[this.currLevel];
         this.potential = this.world[this.currLevel].path 
+    };
 
+    nextPath() {
         // what this? setting all directions to false except the current potential move:
         // by this point currPoint SHOULD be updated
+        // this needs to be set AS SOON as Map object created.
         for (const dir of Object.keys(this.player.directions)) {
             if (dir == this.potential) this.player.directions[dir] = true;
             else this.player.directions[dir] = false;
         }
-    };
+    }
 
     drawPaths(context) {
         for (let point = 0; point < Object.keys(this.world).length - 1; point++) {
@@ -76,31 +77,23 @@ export default class Map {
         return playa.x == point.x && playa.y == point.y;
     }
 
+    // compensates for 3-pixel difference:
+    // I could use the this.currPoint.reached property, 
+    // if this.currPoint.reached == true and player presses next direction, make 3-pixel jump
+    // player.pressed to be used too.
     atPoint2(playa, point) {
-        if (Math.abs(playa.x - point.x) < 1 && Math.abs(playa.y - point.y) < 1) {
-            this.outaRange = false;
-            return true;
-        } else {
-            this.outaRange = true;
-            return false;
-        }
+        if (Math.abs(playa.x - point.x) <= 1 && Math.abs(playa.y - point.y) <= 1) return true;
     }
-
-    /* in the later logic:
-    in player's += 5 logic
-        if (!atpoint(...) && this.outaRange == false)
-    */
-
 
     // THIS REQUIRES CONTEXT TOO:
     handlePlayer(context) {
-    
+        this.nextPath();
         this.player.draw(context);
         this.player.update();
     
         // when player NOT AT either points, inMotion is true. Initially false:
-        this.player.inMotion = !this.atPoint(this.player, this.currPoint) && 
-                               !this.atPoint(this.player, this.nextPoint);
+        this.player.inMotion = !this.atPoint2(this.player, this.currPoint) && 
+                               !this.atPoint2(this.player, this.nextPoint);
 
         if (this.player.inMotion) {
             this.currPoint.reached = false; // Reset the reached status while moving

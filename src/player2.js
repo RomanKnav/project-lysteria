@@ -17,10 +17,6 @@ export default class Player {
         this.directions = 
                 {"null": false, "left": false, "up": false, "right": false, "down": false};
 
-        // this.directions[this.direction].....example: false
-
-        /* on moving question: inputHandler should only register those that are TRUE */
-
         this.disabled = false; 
 
         // what's used for? Determine mouse coords and if it's clicked or not.
@@ -37,6 +33,7 @@ export default class Player {
         
         // this was created to stop player from moving on own.
         // not ONLY used for that, but also indicates when correct key was pressed 
+        // can only turn true with the DICTIONARY
         this.pressed = false;   
 
         // why's this initially set to true?
@@ -68,6 +65,7 @@ export default class Player {
     update() {
         // different angle will have to be drawn as player faces different directions.
 
+        // what this? finds the key in directions whose value is TRUE
         let trueKey = Object.keys(this.directions).find(key => this.directions[key]);
         // console.log(this.inMotion);  should NOT turn to true
 

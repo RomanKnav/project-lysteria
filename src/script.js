@@ -173,7 +173,8 @@ function animate() {
 
     window.requestAnimationFrame(animate);
 
-    console.log(player.inMotion);
+    // console.log(player.inMotion);
+    console.log("(" + player.x, player.y + ")", "(" + worlds[worldNum][currMap.currLevel].x, worlds[worldNum][currMap.currLevel].y + ")");
 }
 
 animate();

@@ -12,28 +12,28 @@ cxt.fillRect(0, 0, canvas.width, canvas.height);
 
 let state = "START";
 
-// DIMENSIONS: 854x480. 
 let worlds = {
     1: 
     { 
         0: {x: canvas.width / 2, y: canvas.height - 100, path: "up", reached: false}, 
         1: {x: canvas.width / 2, y: canvas.height - 400, path: "right", reached: false},
-        2: {x: canvas.width - 199, y: canvas.height - 400, path: "down", reached: false},
-        3: {x: canvas.width - 199, y: canvas.height - 300, path: "end", reached: false}
+        2: {x: canvas.width - 200, y: canvas.height - 400, path: "down", reached: false},
+        3: {x: canvas.width - 200, y: canvas.height - 300, path: "end", reached: false}
     },
     2: 
     { 
-        0: {x: 99, y: 99, path: "right", reached: false}, 
-        1: {x: canvas.width / 2 + 99, y: 99, path: "down", reached: false},
-        2: {x: canvas.width / 2 + 99, y: 300, path: "left", reached: false},
-        3: {x: 99, y: 300, path: "end", reached: false},
+        0: {x: 100, y: 100, path: "right", reached: false}, 
+        1: {x: canvas.width / 2 + 100, y: 100, path: "down", reached: false},
+        2: {x: canvas.width / 2 + 100, y: 300, path: "left", reached: false},
+        3: {x: 100, y: 300, path: "end", reached: false},
     },
     3: 
     { 
-        0: {x: canvas.width / 2 - 1, y: canvas.height - 100, path: "up", reached: false}, 
-        1: {x: canvas.width / 2 - 1, y: canvas.height - 400, path: "right", reached: false},
-        2: {x: canvas.width - 200, y: canvas.height - 400, path: "down", reached: false},
-        3: {x: canvas.width - 200, y: canvas.height - 300, path: "end", reached: false},
+        0: {x: canvas.width / 2, y: canvas.height - 100, path: "up", reached: false}, 
+        1: {x: canvas.width / 2, y: canvas.height - 400, path: "left", reached: false},
+        2: {x: 200, y: canvas.height - 400, path: "down", reached: false},
+        3: {x: 200, y: canvas.height - 190, path: "end", reached: false},
+        4: {x: 340, y: canvas.height - 190, path: "end", reached: false}
     },   
 }; 
 
@@ -45,14 +45,8 @@ let player = new Player();
 new InputHandler(player, canvas);
 
 // map requires: worlds sub-dictionary, player 
-let worldNum = 1;
+let worldNum = 3;
 let currMap = new Map(worlds[worldNum], player);
-
-// DONT WORK:
-// player.x = worlds[worldNum][currMap.currLevel.x];
-// player.y = worlds[worldNum][currMap.currLevel.y];
-
-// maybe I should include a "handleMap" function...
 
 function handleMap() {
     currMap.drawPaths(cxt);
@@ -96,11 +90,12 @@ function animate() {
     handleMap();
     handleState();
 
-    // console.log(player.y, worlds[worldNum][currMap.nextLevel].y);   // should NOT be true.
-    // console.log(worlds[worldNum][currMap.currLevel].reached);
-    // (worlds[worldNum][currMap.currLevel].x, worlds[worldNum][currMap.currLevel].y));
+    // console.log(player.direction, currMap.potential);
+    console.log(player.pressed);
 
-    console.log(player.direction, currMap.potential);
+    // log the player and point coords (DONT REMOVE):
+    // console.log("(" + player.x, player.y + ")", 
+    // "(" + worlds[worldNum][currMap.nextLevel].x, worlds[worldNum][currMap.nextLevel].y + ")");
 
     window.requestAnimationFrame(animate);
 }
