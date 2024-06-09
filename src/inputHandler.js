@@ -9,10 +9,7 @@ export default class InputHandler {
         // make function (?) that checks if given key is true in player.directions:
 
         let dirs = entity.directions;
-
-        /*  this.directions = 
-                {"null": false, "left": false, "up": true, "right": false, "down": false}; */
-
+        
         // keys: the actual keypresses. Values: direction for player to move.
         const keyDirectionMap = {
             'ArrowLeft': 'left',

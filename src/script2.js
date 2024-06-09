@@ -1,6 +1,6 @@
 // to fuck around with map objects
 
-import Player from '/src/player.js';
+import Player from '/src/player2.js';
 import InputHandler from '/src/inputHandler.js';
 import Button from '/src/button.js'; 
 import Map from '/src/map.js';    
@@ -16,24 +16,24 @@ let state = "START";
 let worlds = {
     1: 
     { 
-        0: {x: canvas.width / 2, y: canvas.height - 100, path: 'up', reached: false}, 
-        1: {x: canvas.width / 2, y: canvas.height - 400, path: 'right', reached: false},
-        2: {x: canvas.width - 200, y: canvas.height - 400, path: 'down', reached: false},
-        3: {x: canvas.width - 200, y: canvas.height - 300, path: 'end', reached: false},
+        0: {x: canvas.width / 2, y: canvas.height - 100, path: "up", reached: false}, 
+        1: {x: canvas.width / 2, y: canvas.height - 400, path: "right", reached: false},
+        2: {x: canvas.width - 199, y: canvas.height - 400, path: "down", reached: false},
+        3: {x: canvas.width - 199, y: canvas.height - 300, path: "end", reached: false}
     },
     2: 
     { 
-        0: {x: 100, y: 100, path: 'right', reached: false}, 
-        1: {x: canvas.width / 2 + 100, y: 100, path: 'down', reached: false},
-        2: {x: canvas.width / 2 + 100, y: 300, path: 'left', reached: false},
-        3: {x: 100, y: 300, path: 'end', reached: false},
+        0: {x: 99, y: 99, path: "right", reached: false}, 
+        1: {x: canvas.width / 2 + 99, y: 99, path: "down", reached: false},
+        2: {x: canvas.width / 2 + 99, y: 300, path: "left", reached: false},
+        3: {x: 99, y: 300, path: "end", reached: false},
     },
     3: 
     { 
-        0: {x: canvas.width / 2 - 1, y: canvas.height - 100, path: 'up', reached: false}, 
-        1: {x: canvas.width / 2 - 1, y: canvas.height - 400, path: 'right', reached: false},
-        2: {x: canvas.width - 200, y: canvas.height - 400, path: 'down', reached: false},
-        3: {x: canvas.width - 200, y: canvas.height - 300, path: 'end', reached: false},
+        0: {x: canvas.width / 2 - 1, y: canvas.height - 100, path: "up", reached: false}, 
+        1: {x: canvas.width / 2 - 1, y: canvas.height - 400, path: "right", reached: false},
+        2: {x: canvas.width - 200, y: canvas.height - 400, path: "down", reached: false},
+        3: {x: canvas.width - 200, y: canvas.height - 300, path: "end", reached: false},
     },   
 }; 
 
@@ -96,9 +96,11 @@ function animate() {
     handleMap();
     handleState();
 
-    // console.log(player.direction == player.trueKey, player.pressed);
-    // console.log(player.y, worlds[worldNum][currMap.currLevel].y);   // should NOT be true.
-    console.log(player.x, canvas.width - 200);
+    // console.log(player.y, worlds[worldNum][currMap.nextLevel].y);   // should NOT be true.
+    // console.log(worlds[worldNum][currMap.currLevel].reached);
+    // (worlds[worldNum][currMap.currLevel].x, worlds[worldNum][currMap.currLevel].y));
+
+    console.log(player.direction, currMap.potential);
 
     window.requestAnimationFrame(animate);
 }

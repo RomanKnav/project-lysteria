@@ -15,7 +15,7 @@ export default class Player {
 
         // lists POSSIBLE paths player can take at current point:
         this.directions = 
-                {"null": false, "left": false, "up": true, "right": false, "down": false};
+                {"null": false, "left": false, "up": false, "right": false, "down": false};
 
         // this.directions[this.direction].....example: false
 

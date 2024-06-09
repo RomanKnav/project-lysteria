@@ -1,7 +1,5 @@
 // ALL CANVASES WILL BE DECLARED IN MAIN SCRIPT (makes easy to keep track of them all)
 
-import Player from '/src/player.js';
-
 export default class Map {
     // I will have multiple "levels" dictionaries in script.js, each one representing a world
     // NOTE: each "levels" object represents ONE world
@@ -31,8 +29,11 @@ export default class Map {
         // this.player = new Player(this.world[this.currLevel].x, this.world[this.currLevel].y);
         this.player = player;
 
-        this.player.x = this.world[this.currLevel].x - 1;
+        // these are INITIAL player coords:
+        this.player.x = this.world[this.currLevel].x;
         this.player.y = this.world[this.currLevel].y;
+
+        this.outaRange = false;
     }
 
     cremate() {
@@ -70,19 +71,34 @@ export default class Map {
     // does this work correctly? is this valid function notation?
     // atPoint = (playa, point) => playa.x === point.x && playa.y + playa.height === point.y;
 
+    // this should possibly be modified to include a bigger range of points:
     atPoint(playa, point) {
         return playa.x == point.x && playa.y == point.y;
     }
+
+    atPoint2(playa, point) {
+        if (Math.abs(playa.x - point.x) < 1 && Math.abs(playa.y - point.y) < 1) {
+            this.outaRange = false;
+            return true;
+        } else {
+            this.outaRange = true;
+            return false;
+        }
+    }
+
+    /* in the later logic:
+    in player's += 5 logic
+        if (!atpoint(...) && this.outaRange == false)
+    */
+
 
     // THIS REQUIRES CONTEXT TOO:
     handlePlayer(context) {
     
         this.player.draw(context);
         this.player.update();
-
     
         // when player NOT AT either points, inMotion is true. Initially false:
-        // THIS is setting it to fucking true??? yes. CULPRIT HERE LOL
         this.player.inMotion = !this.atPoint(this.player, this.currPoint) && 
                                !this.atPoint(this.player, this.nextPoint);
 
