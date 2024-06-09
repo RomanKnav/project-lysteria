@@ -8,8 +8,8 @@ export default class InputHandler {
 
         // make function (?) that checks if given key is true in player.directions:
 
-        let dirs = entity.directions;
-        
+        this.dirs = entity.directions;
+
         // keys: the actual keypresses. Values: direction for player to move.
         const keyDirectionMap = {
             'ArrowLeft': 'left',
@@ -25,12 +25,13 @@ export default class InputHandler {
         document.addEventListener("keydown", (event) => {
 
             let direction = keyDirectionMap[event.key];
+            console.log(direction);
             /* direction is simply a pressed key. If it's in the map, return its value. 
             Otherwise, its undefined */
 
             // if direction exists in map and it's value in player.directions is true...
             // note that this runs ONLY if a key is pressed down
-            if (direction && dirs[direction] && !entity.disabled) {
+            if (direction && this.dirs[direction] && !entity.disabled) {
                 entity.direction = direction;
                 entity.moved = true;        // maybe set timer to reset?
             }
