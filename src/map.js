@@ -19,6 +19,7 @@ export default class Map {
         this.potential = this.world[this.currLevel].path 
     };
 
+    // simply sets the next possible path in the dictionary
     nextPath() { 
         for (const dir of Object.keys(this.player.directions)) {
             if (dir == this.potential) this.player.directions[dir] = true;
@@ -26,8 +27,20 @@ export default class Map {
         }
     }
 
+    /* remember, this.world object looks like: 
+        { 
+            0: {x: canvas.width / 2, y: canvas.height - 100, path: "up", reached: false}, 
+            1: {x: canvas.width / 2, y: canvas.height - 400, path: "right", reached: false},
+            2: {x: canvas.width - 200, y: canvas.height - 400, path: "down", reached: false},
+            3: {x: canvas.width - 200, y: canvas.height - 300, path: "end", reached: false}
+        }
+    
+    how the fuck does this work again?  */
+
     drawPaths(context) {
-        for (let point = 0; point < Object.keys(this.world).length - 1; point++) {
+        const points = Object.keys(this.world).length;
+        for (let point = 0; point < points - 1; point++) {
+            // each subdict is ONE line
             let x1 = this.world[point].x;
             let y1 = this.world[point].y;
             let x2 = this.world[point + 1].x;
@@ -39,14 +52,15 @@ export default class Map {
             context.strokeStyle = 'black';
             context.lineWidth = 10;
             context.stroke();
+            context.closePath();
         }
     }
 
     // return true if player is within the GIVEN point's range:
     atPoint(playa, point) {
         if (Math.abs(playa.x - point.x) <= 1 && Math.abs(playa.y - point.y) <= 1) {
-                return true;
-            } 
+            return true;
+        } 
     }
     
     handlePlayer(context) {

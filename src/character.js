@@ -20,7 +20,18 @@ let characters = {
     "Seraphina": {accuracy: 0, dodging: 0, armor: 0, weapon: "none", points: 10}
 };  
 
+// after each character is created, a "Character" object should be created.
 
+export default class Character {
+    constructor() {
+        this.name;
+        this.type;
+        this.accuracy;
+        this.dodging;
+        this.armor;
+        this.weapon;
+    }
+}
 
 
 

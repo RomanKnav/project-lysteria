@@ -1,7 +1,7 @@
 // to fuck around with map objects
 
 import Player from '/src/player.js';
-import InputHandler from '/src/inputHandler2.js';
+import InputHandler from '/src/inputHandler.js';
 import Button from '/src/button.js'; 
 import Map from '/src/map.js';    
 
@@ -12,6 +12,7 @@ cxt.fillRect(0, 0, canvas.width, canvas.height);
 
 let state = "START";
 
+// maybe I can add a "playable" property to denote if point is actually a level or it's empty.
 let worlds = {
     1: 
     { 
@@ -43,6 +44,13 @@ let worlds = {
         2: {x: canvas.width - 200, y: canvas.height - 400, path: "down", reached: false},
         3: {x: canvas.width - 200, y: canvas.height - 200, path: "end", reached: false}
     },   
+    5:
+    {
+        0: {x: canvas.width / 2, y: canvas.height - 100, path: "up", reached: false}, 
+        1: {x: canvas.width / 2, y: 100, path: "left", reached: false},
+        2: {x: 200, y: 100, path: "end", reached: false},
+        3: {x: 700, y: 100, path: "left", reached: false}
+    }
 }; 
 
 // x, y, width, text, clickable
@@ -54,7 +62,7 @@ let player = new Player();
 new InputHandler(player, canvas);
 
 // map requires: worlds sub-dictionary, player 
-let worldNum = 2;
+let worldNum = 5;
 let currMap = new Map(worlds[worldNum], player);
 
 function handleMap() {
@@ -101,11 +109,11 @@ function animate() {
 
     // console.log(player.inMotion);
     // console.log(player.direction, player.inMotion);
-    // console.log(currMap.potential);
+    // console.log(player.trueKey);
     // console.log(player.moved);          // yes, this remains FALSE after incorrect keypress
     // console.log(player.inMotion);
     // console.log(JSON.stringify(player.directions));
-    console.log(player.trueKey);
+    // console.log(currMap.potential);
 
     window.requestAnimationFrame(animate);
 }

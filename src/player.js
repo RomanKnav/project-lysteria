@@ -28,7 +28,7 @@ export default class Player {
         this.inMotion = false; 
 
         // all values in this.directions are initially false. Set in update()
-        // this.trueKey;
+        this.trueKey;
         // this.trueKey = Object.keys(this.directions).find(key => this.directions[key]);
     } 
 
@@ -52,6 +52,8 @@ export default class Player {
         // must make into property:
         // let trueKey;
         let trueKey = Object.keys(this.directions).find(key => this.directions[key]);
+        this.trueKey = trueKey;
+
         // if (this.direction == this.trueKey) this.pressed = true;
         if (this.direction == trueKey) this.pressed = true;
         else this.pressed = false;

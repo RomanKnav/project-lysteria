@@ -7,34 +7,46 @@ export default class InputHandler {
     // this.moveLocked = (dir) => {
     //     if (!entity.inMotion) entity.direction = dir;
     // };
- 
-    let keys = {"w": false, "a": false, "s": false, "d": false};
 
-    // ONCE PLAYER IS IN MOTION, DIRECTION CAN"T BE CHANGED:
+    // the whole point of having this dictionary is to make it possible to have 
+    // multiple key presses:
+    this.keys = {"w": false, "a": false, "s": false, "d": false};
+
+    console.log(JSON.stringify(this.keys));
+
+    this.dirs = entity.directions;
+
+    // ONCE PLAYER IS IN MOTION, DIRECTION CAN"T BE CHANGED -good
     // WTF IS SETTING INMOTION TO TRUE???
     
     document.addEventListener("keydown", (event) => {    
         if (!entity.disabled && !entity.inMotion) {
-            keys[event.key] = true;
+            // event.key represents ANY key press.
+            // prevents other keys from being added to the dict:
+            if (event.key in Object.keys(this.keys)) this.keys[event.key] = true;
 
             entity.moved = true;
+
+            console.log(JSON.stringify(this.keys));
     
+            /* direction should only be changed if the direction to change to is player.trueKey,
+            or currMap.path */
              switch (event.key) { 
                 case "w":
                     // if (event.key == potential)
-                    entity.direction = "up";
+                    if (this.dirs["up"]) entity.direction = "up";
                     break;
 
                 case "a":
-                    entity.direction = "left";
+                    if (this.dirs["left"]) entity.direction = "left";
                     break;
 
                 case "s":
-                    entity.direction = "down";           
+                    if (this.dirs["down"]) entity.direction = "down";      
                     break;
 
                 case "d":
-                    entity.direction = "right";
+                    if (this.dirs["right"]) entity.direction = "right";
                     break;
             }
             
@@ -51,7 +63,7 @@ export default class InputHandler {
 
     // the above variables should remain true after key-up.
     document.addEventListener("keyup", (event) => {
-        // lmfao
+        this.keys[event.key] = false;
     });
 
     
