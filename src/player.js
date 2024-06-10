@@ -8,6 +8,7 @@ export default class Player {
         this.width = 50;
         this.height = 50;
 
+        // This dictates which direction player can go to next, right? YES
         this.directions = 
                 {"null": false, "left": false, "up": false, "right": false, "down": false};
 
@@ -21,11 +22,14 @@ export default class Player {
             clicked: false
         };
 
-        
         this.direction = "null";       
         this.pressed = false;   
         this.moved = false; 
         this.inMotion = false; 
+
+        // all values in this.directions are initially false. Set in update()
+        // this.trueKey;
+        // this.trueKey = Object.keys(this.directions).find(key => this.directions[key]);
     } 
 
     draw(context) {
@@ -41,10 +45,17 @@ export default class Player {
     }
 
     update() {
-        let trueKey = Object.keys(this.directions).find(key => this.directions[key]);   
+        // finds value that is true in "directions": 
+        // this.trueKey = Object.keys(this.directions).find(key => this.directions[key]);
+        
+        // I need to use this elsewhere, but I don't wanna have to recalculate every time.
+        // must make into property:
+        // let trueKey;
+        let trueKey = Object.keys(this.directions).find(key => this.directions[key]);
+        // if (this.direction == this.trueKey) this.pressed = true;
         if (this.direction == trueKey) this.pressed = true;
         else this.pressed = false;
-           
+
         if (!this.disabled && this.directions[this.direction] && this.pressed) {
             switch(this.direction) {
                 case "left":

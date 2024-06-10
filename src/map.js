@@ -42,8 +42,11 @@ export default class Map {
         }
     }
 
+    // return true if player is within the GIVEN point's range:
     atPoint(playa, point) {
-        if (Math.abs(playa.x - point.x) <= 1 && Math.abs(playa.y - point.y) <= 1) return true;
+        if (Math.abs(playa.x - point.x) <= 1 && Math.abs(playa.y - point.y) <= 1) {
+                return true;
+            } 
     }
     
     handlePlayer(context) {
@@ -51,6 +54,7 @@ export default class Map {
         this.player.draw(context);
         this.player.update();
         
+        // HERE IS WHERE (ONLY PLACE) INMOTION IS SET TO TRUE:
         this.player.inMotion = !this.atPoint(this.player, this.currPoint) && 
                                !this.atPoint(this.player, this.nextPoint);
 

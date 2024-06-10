@@ -100,7 +100,12 @@ function animate() {
     handleState();
 
     // console.log(player.inMotion);
-    console.log(player.inMotion);
+    // console.log(player.direction, player.inMotion);
+    // console.log(currMap.potential);
+    // console.log(player.moved);          // yes, this remains FALSE after incorrect keypress
+    // console.log(player.inMotion);
+    // console.log(JSON.stringify(player.directions));
+    console.log(player.trueKey);
 
     window.requestAnimationFrame(animate);
 }

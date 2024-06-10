@@ -1,14 +1,17 @@
 export default class InputHandler {
   constructor(entity, canvas) {
-    this.canvas = canvas;   
+    this.canvas = canvas;  
 
-    this.moveLocked = (dir) => {
-        if (!entity.inMotion) entity.direction = dir;
-    };
+    // MUST TRY: use entity.directions. This dictates which direction player can go to next.
+
+    // this.moveLocked = (dir) => {
+    //     if (!entity.inMotion) entity.direction = dir;
+    // };
  
     let keys = {"w": false, "a": false, "s": false, "d": false};
 
     // ONCE PLAYER IS IN MOTION, DIRECTION CAN"T BE CHANGED:
+    // WTF IS SETTING INMOTION TO TRUE???
     
     document.addEventListener("keydown", (event) => {    
         if (!entity.disabled && !entity.inMotion) {
@@ -18,6 +21,7 @@ export default class InputHandler {
     
              switch (event.key) { 
                 case "w":
+                    // if (event.key == potential)
                     entity.direction = "up";
                     break;
 
