@@ -1,4 +1,4 @@
-var canvas = document.getElementById('canvas1');
+var canvas = document.getElementById('canvas1');    // used for setting movement boundaries
 
 export default class Player {
     constructor() {
@@ -29,7 +29,9 @@ export default class Player {
 
         // all values in this.directions are initially false. Set in update()
         this.trueKey;
-        // this.trueKey = Object.keys(this.directions).find(key => this.directions[key]);
+
+        this.inRange = true;    
+        // if right key pressed, should invisible square disappear? No.
     } 
 
     draw(context) {
@@ -44,7 +46,7 @@ export default class Player {
         context.fillText("player", this.x + this.width / 2, this.y + this.height / 2);
     }
 
-    update() {
+    update(delta_time) {
         // finds value that is true in "directions": 
         // this.trueKey = Object.keys(this.directions).find(key => this.directions[key]);
         
@@ -61,16 +63,17 @@ export default class Player {
         if (!this.disabled && this.directions[this.direction] && this.pressed) {
             switch(this.direction) {
                 case "left":
-                    if (this.x > 0) this.x -= 2;
+                    // if (this.x > 0) this.x -= 2;
+                    if (this.x > 0) this.x -= Math.floor(500 * delta_time);
                     break;
                 case "up":
-                    if (this.y > 0) this.y -= 2;
+                    if (this.y > 0) this.y -= Math.floor(500 * delta_time);
                     break;
                 case "right":
-                    if (this.x + this.height < canvas.width) this.x += 2;
+                    if (this.x + this.height < canvas.width) this.x += Math.floor(500 * delta_time);
                     break;
                 case "down":
-                    if (this.y + this.height < canvas.height) this.y += 2;
+                    if (this.y + this.height < canvas.height) this.y += Math.floor(500 * delta_time);
                     break;
             }
         }

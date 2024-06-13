@@ -62,13 +62,8 @@ let player = new Player();
 new InputHandler(player, canvas);
 
 // map requires: worlds sub-dictionary, player 
-let worldNum = 5;
+let worldNum = 1;
 let currMap = new Map(worlds[worldNum], player);
-
-function handleMap() {
-    currMap.drawPaths(cxt);
-    currMap.handlePlayer(cxt);
-}
 
 function handleState() {
     switch(state) {
@@ -99,22 +94,35 @@ function mouseCollision(first, second, callback) {
     }
 }
 
-function animate() {
+let lastTime = 0;
+
+// can I make deltaTime globally available? that is not necessary at all.
+function animate(timestamp) {
+
+    if (!lastTime) lastTime = timestamp;
+
+    // delta time is the difference in time from current frame to last one.
+    const deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
+    lastTime = timestamp;
+
     cxt.clearRect(0, 0, canvas.width, canvas.height);
     cxt.fillStyle = "green"; 
     cxt.fillRect(0, 0, canvas.width, canvas.height);
 
-    handleMap();
+    // handleMap();
+    currMap.drawPaths(cxt);
+    currMap.handlePlayer(cxt, deltaTime);
+
     handleState();
 
-    // console.log(player.inMotion);
-    // console.log(player.direction, player.inMotion);
-    // console.log(player.trueKey);
-    // console.log(player.moved);          // yes, this remains FALSE after incorrect keypress
-    // console.log(player.inMotion);
-    // console.log(JSON.stringify(player.directions));
-    // console.log(currMap.potential);
+    // console.log(player.x, currMap.nextPoint.x);
+    // currRange obj has 5 elems:
+    console.log(player.x, currMap.currPoint.x, "" + currMap.currRange(currMap.currPoint.x - 2, currMap.currPoint.x + 2));
 
     window.requestAnimationFrame(animate);
 }
-animate();
+
+// this automatically passes a "timestamp" arg to animate().
+// what does timestamp look like? a floating point num (w/ tenths place).
+// Precisely: num of milliseconds that've elapsed since page loaded.
+window.requestAnimationFrame(animate);

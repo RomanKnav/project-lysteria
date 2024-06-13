@@ -10,7 +10,17 @@ export default class Map {
         this.player = player;
         this.player.x = this.world[this.currLevel].x;
         this.player.y = this.world[this.currLevel].y;
-    }
+
+        /* REMEMBER: currPoint/nextPoint are WHOLE ASS OBJECTS:
+            0: {x: canvas.width / 2, y: canvas.height - 100, path: "up", reached: false}
+        */
+
+        // returns an array of range between two nums (inclusive):
+        // if player x/y in this range, player.inRange remains true.
+        // func to be used for both x/y:
+        // actual x should be in middle of array:
+        this.currRange = (start, stop) => Array.from({length: (stop - start) + 1}, (value, index) => start + index);
+    };
 
     cremate() {
         this.currLevel += 1, this.nextLevel += 1;       
@@ -26,16 +36,6 @@ export default class Map {
             else this.player.directions[dir] = false;
         }
     }
-
-    /* remember, this.world object looks like: 
-        { 
-            0: {x: canvas.width / 2, y: canvas.height - 100, path: "up", reached: false}, 
-            1: {x: canvas.width / 2, y: canvas.height - 400, path: "right", reached: false},
-            2: {x: canvas.width - 200, y: canvas.height - 400, path: "down", reached: false},
-            3: {x: canvas.width - 200, y: canvas.height - 300, path: "end", reached: false}
-        }
-    
-    how the fuck does this work again?  */
 
     drawPaths(context) {
         const points = Object.keys(this.world).length;
@@ -57,16 +57,23 @@ export default class Map {
     }
 
     // return true if player is within the GIVEN point's range:
+    // this is NOT perfect. Player sometimes stops before leaving point:
+    // player SHOULD NOT stop moving while still within the boundaries of current point.
     atPoint(playa, point) {
-        if (Math.abs(playa.x - point.x) <= 1 && Math.abs(playa.y - point.y) <= 1) {
+        if (Math.abs(playa.x - point.x) <= 2 && Math.abs(playa.y - point.y) <= 2) {
             return true;
         } 
     }
+
+    // determine if player is within the range of a point (square) 
+    inRange() {
+
+    }
     
-    handlePlayer(context) {
+    handlePlayer(context, delta_time) {
         this.nextPath();
         this.player.draw(context);
-        this.player.update();
+        this.player.update(delta_time);
         
         // HERE IS WHERE (ONLY PLACE) INMOTION IS SET TO TRUE:
         this.player.inMotion = !this.atPoint(this.player, this.currPoint) && 
