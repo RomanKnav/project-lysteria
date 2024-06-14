@@ -33,6 +33,8 @@ export default class Player {
         this.inRange = true;    
         // should be false when player exits current range defined by currMap.currRange().
         // if right key pressed, should invisible square disappear? No.
+
+        this.speedMultiplier;
     } 
 
     draw(context) {
@@ -61,20 +63,25 @@ export default class Player {
         if (this.direction == trueKey) this.pressed = true;
         else this.pressed = false;
 
+        // delta_time > 0.01 means we're at 60hz or less, so speed shit up:
+        if (delta_time > 0.01) this.speedMultiplier = 800;
+        else this.speedMultiplier = 500;
+
         if (!this.disabled && this.directions[this.direction] && this.pressed) {
             switch(this.direction) {
                 case "left":
                     // if (this.x > 0) this.x -= 2;
-                    if (this.x > 0) this.x -= Math.floor(500 * delta_time);
+                    // value should be 800 for 60hz
+                    if (this.x > 0) this.x -= Math.floor(this.speedMultiplier * delta_time);
                     break;
                 case "up":
-                    if (this.y > 0) this.y -= Math.floor(500 * delta_time);
+                    if (this.y > 0) this.y -= Math.floor(this.speedMultiplier * delta_time);
                     break;
                 case "right":
-                    if (this.x + this.height < canvas.width) this.x += Math.floor(500 * delta_time);
+                    if (this.x + this.height < canvas.width) this.x += Math.floor(this.speedMultiplier * delta_time);
                     break;
                 case "down":
-                    if (this.y + this.height < canvas.height) this.y += Math.floor(500 * delta_time);
+                    if (this.y + this.height < canvas.height) this.y += Math.floor(this.speedMultiplier * delta_time);
                     break;
             }
         }

@@ -100,11 +100,15 @@ let lastTime = 0;
 // can I make deltaTime globally available? that is not necessary at all.
 function animate(timestamp) {
 
-    if (!lastTime) lastTime = timestamp;
+    if (!lastTime) lastTime = timestamp; // delta time is the difference in time from current frame to last one.
 
-    // delta time is the difference in time from current frame to last one.
-    const deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
+    // let deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
+    let deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
     lastTime = timestamp;
+
+    if (deltaTime > 0.01) {
+        deltaTime = deltaTime - 0.01;
+    }
 
     cxt.clearRect(0, 0, canvas.width, canvas.height);
     cxt.fillStyle = "green"; 
@@ -118,7 +122,12 @@ function animate(timestamp) {
 
     // console.log(player.x, currMap.nextPoint.x);
     // currRange obj has 5 elems:
-    console.log(player.inRange, player.x, currMap.currPoint.x, "" + currMap.currRange(currMap.currPoint.x - 2, currMap.currPoint.x + 2));
+    // console.log(player.inRange, player.x, currMap.currPoint.x, "" + 
+    // currMap.currRange(currMap.currPoint.x - 2, currMap.currPoint.x + 2), "    " + 
+    // currMap.currRange(currMap.currPoint.y - 2, currMap.currPoint.y + 2));
+
+    // console.log(deltaTime);
+
 
     window.requestAnimationFrame(animate);
 }
