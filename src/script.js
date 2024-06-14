@@ -34,7 +34,8 @@ let worlds = {
         1: {x: canvas.width / 2, y: canvas.height - 400, path: "left", reached: false},
         2: {x: 200, y: canvas.height - 400, path: "down", reached: false},
         3: {x: 200, y: canvas.height - 190, path: "right", reached: false},
-        4: {x: 340, y: canvas.height - 190, path: "end", reached: false}
+        4: {x: 320, y: canvas.height - 190, path: "up", reached: false},
+        5: {x: 320, y: canvas.height - 290, path: "end", reached: false},
     },   
     // try to add DIAGNAL paths (easier than adding multiple paths)
     4: 
@@ -51,7 +52,7 @@ let worlds = {
         2: {x: 200, y: 100, path: "end", reached: false},
         3: {x: 700, y: 100, path: "left", reached: false}
     }
-}; 
+};
 
 // x, y, width, text, clickable
 let startButt = new Button(canvas.width / 2 - 30, canvas.height / 3, 60, "Start", true);
@@ -62,7 +63,7 @@ let player = new Player();
 new InputHandler(player, canvas);
 
 // map requires: worlds sub-dictionary, player 
-let worldNum = 1;
+let worldNum = 3;
 let currMap = new Map(worlds[worldNum], player);
 
 function handleState() {
@@ -117,7 +118,7 @@ function animate(timestamp) {
 
     // console.log(player.x, currMap.nextPoint.x);
     // currRange obj has 5 elems:
-    console.log(player.x, currMap.currPoint.x, "" + currMap.currRange(currMap.currPoint.x - 2, currMap.currPoint.x + 2));
+    console.log(player.inRange, player.x, currMap.currPoint.x, "" + currMap.currRange(currMap.currPoint.x - 2, currMap.currPoint.x + 2));
 
     window.requestAnimationFrame(animate);
 }

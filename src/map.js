@@ -20,6 +20,7 @@ export default class Map {
         // func to be used for both x/y:
         // actual x should be in middle of array:
         this.currRange = (start, stop) => Array.from({length: (stop - start) + 1}, (value, index) => start + index);
+        // can confirm this changes after every point? IT DOES
     };
 
     cremate() {
@@ -86,7 +87,8 @@ export default class Map {
             this.player.inMotion = false;
         }
         
-        if (!this.player.inMotion && this.player.moved) {
+        // This is AFTER player has moved:
+        if (!this.player.inMotion && this.player.moved && !this.player.inRange) {
             this.player.direction = "null";
             this.player.pressed = false;
                     
@@ -97,5 +99,10 @@ export default class Map {
         }
         
         if (this.player.direction == "null") this.currPoint.reached = true;
+
+        if (this.currRange(this.currPoint.x - 2, this.currPoint.x + 2).includes(this.player.x) &&
+            this.currRange(this.currPoint.y - 2, this.currPoint.y + 2).includes(this.player.y)) {
+                this.player.inRange = true;
+            } else this.player.inRange = false;
     }
 }

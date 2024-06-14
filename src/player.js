@@ -31,6 +31,7 @@ export default class Player {
         this.trueKey;
 
         this.inRange = true;    
+        // should be false when player exits current range defined by currMap.currRange().
         // if right key pressed, should invisible square disappear? No.
     } 
 
