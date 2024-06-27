@@ -63,7 +63,7 @@ let player = new Player();
 new InputHandler(player, canvas);
 
 // map requires: worlds sub-dictionary, player 
-let worldNum = 3;
+let worldNum = 2;
 let currMap = new Map(worlds[worldNum], player);
 
 function handleState() {
@@ -106,9 +106,7 @@ function animate(timestamp) {
     let deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
     lastTime = timestamp;
 
-    if (deltaTime > 0.01) {
-        deltaTime = deltaTime - 0.01;
-    }
+    // if (deltaTime > 0.01) deltaTime = deltaTime - 0.01;
 
     cxt.clearRect(0, 0, canvas.width, canvas.height);
     cxt.fillStyle = "green"; 
@@ -126,7 +124,7 @@ function animate(timestamp) {
     // currMap.currRange(currMap.currPoint.x - 2, currMap.currPoint.x + 2), "    " + 
     // currMap.currRange(currMap.currPoint.y - 2, currMap.currPoint.y + 2));
 
-    // console.log(deltaTime);
+    console.log(deltaTime);
 
 
     window.requestAnimationFrame(animate);
