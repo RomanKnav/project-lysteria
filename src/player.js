@@ -35,6 +35,7 @@ export default class Player {
         // if right key pressed, should invisible square disappear? No.
 
         this.speedMultiplier;
+        // this.speedMultiplier = 500;
     } 
 
     draw(context) {
@@ -64,24 +65,26 @@ export default class Player {
         else this.pressed = false;
 
         // delta_time > 0.01 means we're at 60hz or less, so speed shit up:
-        if (delta_time > 0.01) this.speedMultiplier = 800;
-        else this.speedMultiplier = 500;
+        // if (delta_time > 0.01) this.speedMultiplier = 800;
+        // else this.speedMultiplier = 500;
+        if (delta_time > 0.01) this.speedMultiplier = 300;
+        else this.speedMultiplier = 450;
 
         if (!this.disabled && this.directions[this.direction] && this.pressed) {
             switch(this.direction) {
                 case "left":
                     // if (this.x > 0) this.x -= 2;
                     // value should be 800 for 60hz
-                    if (this.x > 0) this.x -= Math.floor(this.speedMultiplier * delta_time);
+                    if (this.x > 0) this.x -= this.speedMultiplier * delta_time;
                     break;
                 case "up":
-                    if (this.y > 0) this.y -= Math.floor(this.speedMultiplier * delta_time);
+                    if (this.y > 0) this.y -= this.speedMultiplier * delta_time;
                     break;
                 case "right":
-                    if (this.x + this.height < canvas.width) this.x += Math.floor(this.speedMultiplier * delta_time);
+                    if (this.x + this.height < canvas.width) this.x += this.speedMultiplier * delta_time;
                     break;
                 case "down":
-                    if (this.y + this.height < canvas.height) this.y += Math.floor(this.speedMultiplier * delta_time);
+                    if (this.y + this.height < canvas.height) this.y += this.speedMultiplier * delta_time;
                     break;
             }
         }
